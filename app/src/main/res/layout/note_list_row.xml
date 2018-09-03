@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/white"
+        android:id="@+id/select"
+        android:foreground="?attr/selectableItemBackground"
+       >
+    <View
+        android:layout_width="8dp"
+        android:layout_height="72dp"
+        android:background="@color/colorAccent"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_padding_horizontal"
+        android:layout_marginLeft="@dimen/dimen_8dp"
+        >
+        <TextView
+            android:id="@+id/product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:layout_marginRight="4dp"
+            android:text="Chicken Fried Rice"
+            android:textColor="@color/item_name"
+            android:textSize="16sp" />
+
+
+
+
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#3456787654"
+            android:layout_below="@+id/product"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/contact_name"
+            android:textSize="@dimen/chef" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/product"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:text="Ksh 320.00"
+            android:textColor="@color/contact_name"
+            android:textSize="@dimen/price" />
+
+        <TextView
+            android:id="@+id/itemss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:text="1x1"
+            android:textColor="@color/colorAccent2"
+            android:textSize="@dimen/chef" />
+
+    </RelativeLayout>
+
+    </RelativeLayout>

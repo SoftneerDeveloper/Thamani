@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.FinalActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="@dimen/dimen_8dp"
+        >
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
+            android:text="Paid Amount"
+            android:textColor="@color/chef" />
+
+        <TextView
+            android:id="@+id/totall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif"
+            android:textSize="40sp"
+            android:text="Ksh.950.00"
+            android:textColor="@color/contact_name" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimen_8dp"
+        >
+
+        <ImageView
+        android:id="@+id/background"
+        android:layout_width="@dimen/placeholder_image"
+        android:layout_height="@dimen/placeholder_image"
+            android:src="@drawable/ic_check_black_24dp"
+            android:layout_gravity="center_horizontal"
+        android:padding="12dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:tint="@color/white"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_circle3"
+        android:layout_centerVertical="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/dimen_8dp"
+            android:background="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/activity_padding_horizontal">
+
+            <ImageView
+                android:id="@+id/imgcash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@color/colorAccent"
+                android:layout_marginRight="@dimen/dimen_8dp"
+                android:src="@drawable/ic_local_atm_black_24dp"/>
+        <TextView
+            android:id="@+id/label2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:layout_toRightOf="@+id/imgcash"
+            android:textSize="18sp"
+            android:text="Cash"
+            android:textColor="@color/contact_name" />
+
+        <TextView
+            android:id="@+id/cashh"
+            android:layout_width="match_parent"
+            android:gravity="end"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
+            android:layout_alignParentRight="true"
+            android:text="Ksh.1000.00"
+            android:textColor="@color/contact_name" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:background="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/activity_padding_horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:text="Change Due"
+                android:textColor="@color/contact_name" />
+
+            <TextView
+                android:id="@+id/duee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:gravity="end"
+                android:text="Ksh.50.00"
+                android:textColor="@color/contact_name" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/dimen_8dp"
+        android:paddingBottom="@dimen/dimen_8dp"
+        >
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Purchased items" />
+
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyler_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+
+        <Button
+            android:id="@+id/btn_print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@drawable/bg_circle"
+            android:textSize="18sp"
+            android:text="PRINT RECEPT" />
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>
