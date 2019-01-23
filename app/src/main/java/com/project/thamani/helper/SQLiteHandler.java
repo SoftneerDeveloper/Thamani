@@ -31,6 +31,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	// Login Table Columns names
 	private static final String KEY_ID = "id";
 	private static final String KEY_USERNAME = "username";
+	private static final String KEY_SHOP = "shop";
 	private static final String KEY_PHONE = "phone";
 	private static final String KEY_UID = "u_id";
 	private static final String KEY_IDNO = "id_no";
@@ -44,6 +45,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
 				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME + " TEXT,"
+				+ KEY_SHOP + " TEXT,"
 				+ KEY_PHONE + " TEXT UNIQUE," + KEY_UID + " TEXT,"
 				+ KEY_IDNO + " TEXT" + ")";
 		db.execSQL(CREATE_LOGIN_TABLE);
@@ -64,11 +66,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	/**
 	 * Storing user details in database
 	 * */
-	public void addUser(String username, String phone, String u_id, String id_no) {
+	public void addUser(String username,String shop, String phone, String u_id, String id_no) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_USERNAME, username); // Name
+		values.put(KEY_SHOP, shop); // Name
 		values.put(KEY_PHONE, phone); // Email
 		values.put(KEY_UID, u_id); // Email
 		values.put(KEY_IDNO, id_no); // Created At
@@ -93,9 +96,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0) {
 			user.put("username", cursor.getString(1));
-			user.put("phone", cursor.getString(2));
-			user.put("u_id", cursor.getString(3));
-			user.put("id_no", cursor.getString(4));
+			user.put("shop", cursor.getString(2));
+			user.put("phone", cursor.getString(3));
+			user.put("u_id", cursor.getString(4));
+			user.put("id_no", cursor.getString(5));
 		}
 		cursor.close();
 		db.close();

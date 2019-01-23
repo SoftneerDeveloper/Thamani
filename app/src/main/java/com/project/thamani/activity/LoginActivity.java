@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+                Log.d(TAG, "Login Response: " + response);
                 hideDialog();
 
                 try {
@@ -134,7 +134,12 @@ public class LoginActivity extends AppCompatActivity {
                     boolean active = user.getBoolean("active");
 
                     // Check for error node in json
-                    if (user != null) {
+                    if (user == null) {
+                        // Error in login. Get the error message
+                        String errorMsg = "Wrong Credentials Try again!";
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    } else {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
@@ -144,30 +149,26 @@ public class LoginActivity extends AppCompatActivity {
 //                        String id = jObj.getString("id");
 
 
-                        
+
                         String user_id = user.getString("user_id");
+                        String shop = user.getString("shop");
                         String fullname = user.getString("fullname");
                         String phone = user.getString("phone");
                         String id = user.getString("id");
 
                         // Inserting row in users table
-                        db.addUser(fullname, phone, user_id,id);
+                        db.addUser(fullname,shop, phone, user_id,id);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
                                 MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = "User account does not exist";
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }

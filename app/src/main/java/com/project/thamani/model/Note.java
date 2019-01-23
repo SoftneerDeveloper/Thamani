@@ -19,10 +19,13 @@ public class Note {
     public static final String COLUMN_GS1 = "gs1";
     public static final String COLUMN_RETAILER = "retailer";
     public static final String COLUMN_TIMESTAMP = "timestamp";
+    public static final String COLUMN_SERIAL = "serial";
+    public static final String COLUMN_OFFLINE = "offline";
 
     private int id;
     private String uuid;
     private String item;
+    private String name;
     private String price;
     private String gtin;
     private String warehouse;
@@ -32,6 +35,8 @@ public class Note {
     private String gs1;
     private String retailer;
     private String timestamp;
+    private String serial;
+    private int offline;
 
 
     // Create table SQL query
@@ -48,16 +53,19 @@ public class Note {
                     + COLUMN_MID + " TEXT,"
                     + COLUMN_GS1+ " TEXT,"
                     + COLUMN_RETAILER+ " TEXT,"
-                    + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
+                    + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP,"
+                    + COLUMN_SERIAL + " TEXT,"
+                    + COLUMN_OFFLINE + " INTEGER "
                     + ")";
 
     public Note() {
     }
 
-    public Note(int id, String uuid, String item, String price, String gtin,String manufacturer,String mid,String warehouse,String wid,String gs1,String retailer, String timestamp) {
+    public Note(int id, String uuid, String item,String name, String price, String gtin,String manufacturer,String mid,String warehouse,String wid,String gs1,String retailer, String timestamp,String serial, int offline) {
         this.id = id;
         this.uuid = uuid;
         this.item = item;
+        this.name = name;
         this.price = price;
         this.gtin = gtin;
         this.warehouse = warehouse;
@@ -67,6 +75,8 @@ public class Note {
         this.gs1 = gs1;
         this.retailer = retailer;
         this.timestamp = timestamp;
+        this.serial = serial;
+        this.offline = offline;
     }
 
     public int getId() {
@@ -103,7 +113,13 @@ public class Note {
     public void setItem(String item) {
         this.item = item;
     }
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getGTIN() {
         return gtin;
     }
@@ -155,6 +171,20 @@ public class Note {
     }
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public void setOffline(int offline) {
+        this.offline = offline;
+    }
+    public int getOffline() {
+        return offline;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+    public String getSerial() {
+        return serial;
     }
 
     public void setId(int id) {

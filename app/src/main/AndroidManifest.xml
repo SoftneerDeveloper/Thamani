@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.project.thamani">
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS" />-->
-    <!--<uses-permission android:name="android.permission.READ_PROFILE" />-->
-    <!--<uses-permission android:name="android.permission.READ_CONTACTS" />-->
+
+    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_PROFILE" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.CAMERA" />-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
 
-
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
@@ -20,12 +21,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:label="@string/action_sign_in"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SaleActivity"
             android:label="@string/app_name"
@@ -41,8 +41,7 @@
         <activity
             android:name=".activity.FinishActivity"
             android:label="Complete Payment"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.WelcomeActivity"
             android:label="@string/app_name"
@@ -53,17 +52,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FinalActivity"
-            android:label="Sale Complete"
-            android:theme="@style/AppTheme"/>
-
         <activity
-            android:name=".activity.ScanActivity"
-            android:label="Scan the Item"
-            android:screenOrientation="portrait"
+            android:name=".activity.FinalActivity"
+            android:label="Sale Complete"
             android:theme="@style/AppTheme" />
-
-
+        <activity android:name=".activity.MpesaActivity" />
+        <activity android:name=".activity.OfflineActivity"
+            android:label="Offline Transactions"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

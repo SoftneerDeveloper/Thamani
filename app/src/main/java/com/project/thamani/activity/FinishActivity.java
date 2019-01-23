@@ -3,6 +3,7 @@ package com.project.thamani.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.pt.minilcd.MiniLcd;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,7 +39,7 @@ import java.util.Map;
 public class FinishActivity extends AppCompatActivity {
 
     private Button btn_sale;
-    private String userid,payy;
+    private String userid,payy,shop,username,staff_id;
     private static final String TAG = FinishActivity.class.getSimpleName();
     private String cash="cash";
 
@@ -49,6 +50,9 @@ public class FinishActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
 
     private EditText pay,pay_amount;
+    MiniLcd miniLcd = null;
+    private Double total;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,8 @@ public class FinishActivity extends AppCompatActivity {
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
+        miniLcd = new MiniLcd();
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -86,10 +92,14 @@ public class FinishActivity extends AppCompatActivity {
 //        String name = user.get("name");
 //        String email = user.get("email");
         userid=user.get("u_id");
+        shop=user.get("shop");
+        username=user.get("username");
+        staff_id=user.get("id_no");
         try {
             sales.put("sale",db.getAllItems());
             sales.put("mode","cash");
             sales.put("user_id",userid);
+            sales.put("staff_id",staff_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -99,14 +109,13 @@ public class FinishActivity extends AppCompatActivity {
 //        Toast.makeText(this, String.valueOf(sales), Toast.LENGTH_SHORT).show();
         Intent intent = getIntent();
 
-        final Double total = intent.getExtras().getDouble("total");
+        total = intent.getExtras().getDouble("total");
         pay.setText(total.toString());
         btn_sale=(Button) findViewById(R.id.btn_sale);
         btn_sale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                  payy = pay_amount.getText().toString().trim();
-
 
                 // Check for empty data in the form
                 if (!payy.isEmpty() ) {
@@ -121,8 +130,6 @@ public class FinishActivity extends AppCompatActivity {
                         postSale(payy,total,sales);
                     }
 
-
-
                 } else {
                     // Prompt user to enter credentials
                     pay_amount.setError("Enter the Cash amount");
@@ -133,6 +140,7 @@ public class FinishActivity extends AppCompatActivity {
 
             }
         });
+        ShowCustomer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     /**
@@ -159,7 +167,7 @@ public class FinishActivity extends AppCompatActivity {
                     boolean error = response.getBoolean("error");
 
                     // Check for error node in json
-                    if (error == true) {
+                    if (error) {
                 Toast.makeText(getApplicationContext(), "Sale is completed successfully.", Toast.LENGTH_LONG).show();
 
                 hideDialog();
@@ -170,8 +178,11 @@ public class FinishActivity extends AppCompatActivity {
                 i.putExtra("total", totall);
                 i.putExtra("cash", cash);
                 startActivity(i);
-
-
+                salee.remove("sale");
+//                salee.remove("sale");
+//                salee.remove("sale");
+//                salee.remove("sale");
+                finish();
                     } else {
 
                         // Error occurred in registration. Get the error
@@ -195,6 +206,8 @@ public class FinishActivity extends AppCompatActivity {
                 if ( error instanceof NoConnectionError) {
                     hideDialog();
 
+                    OfflineSale(payyy,totall,salee);
+
                     Toast.makeText(FinishActivity.this,"Check your Data Connection",    Toast.LENGTH_LONG).show();
                 } else if (error instanceof TimeoutError ) {
                     hideDialog();
@@ -206,14 +219,17 @@ public class FinishActivity extends AppCompatActivity {
 
                     Toast.makeText(FinishActivity.this,"Check your Data Connection",    Toast.LENGTH_LONG).show();
                 } else if (error instanceof ServerError) {
+                    OfflineSale(payyy,totall,salee);
                     hideDialog();
 
                     Toast.makeText(FinishActivity.this,"Could not reach the Server",    Toast.LENGTH_LONG).show();
                 } else if (error instanceof NetworkError) {
+                    OfflineSale(payyy,totall,salee);
                     hideDialog();
 
                     Toast.makeText(FinishActivity.this,"No Internet Connection",    Toast.LENGTH_LONG).show();
                 } else if (error instanceof ParseError) {
+                    OfflineSale(payyy,totall,salee);
                     hideDialog();
 
                     Toast.makeText(getApplicationContext(),
@@ -229,7 +245,43 @@ public class FinishActivity extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_string_req);
     }
+    private void  ShowCustomer(){
+        miniLcd.open();
+//        miniLcd.displayBootPicture(225,255,255);
+//        miniLcd.eraseUserPicture(206195208);
+        miniLcd.fullRectangle(2,2,476,316,206195208);
 
+//        miniLcd.displayPicture(32,0, BitmapFactory.decodeResource(getResources(), R.drawable.thamani_logo_black));
+
+
+        miniLcd.displayString(55,30,000000,206195208,"RETAILER NAME:"+ shop,12);
+
+        miniLcd.displayString(32,70,000000,206195208,"---------------------------------",10);
+        miniLcd.displayString(32,120,000000,206195208,"TOTAL AMOUNT:  KES"+ total,20);
+        miniLcd.displayString(32,160,000000,206195208,"Served By :"+ username,12);
+        miniLcd.displayString(90,260,000000,206195208,"Powered by Thamani Online ",12);
+
+        miniLcd.close();
+
+    }
+    private  void OfflineSale(final String payyy, final Double totall, final JSONObject salee){
+
+        db.updateOffline();
+
+        Toast.makeText(getApplicationContext(), "Offline Sale is completed successfully.", Toast.LENGTH_LONG).show();
+        // Launch Final activity
+        double cash=Double.parseDouble(payyy);
+
+        Intent i =new Intent(FinishActivity.this,FinalActivity.class);
+        i.putExtra("total", totall);
+        i.putExtra("cash", cash);
+        startActivity(i);
+        salee.remove("sale");
+//                salee.remove("sale");
+//                salee.remove("sale");
+//                salee.remove("sale");
+        finish();
+    }
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();

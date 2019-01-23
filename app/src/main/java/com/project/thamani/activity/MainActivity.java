@@ -1,12 +1,17 @@
 package com.project.thamani.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.pt.minilcd.MiniLcd;
+//import android.pt.scan.Scan;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +23,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,13 +50,17 @@ import com.project.thamani.model.Note;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,20 +82,26 @@ public class MainActivity extends AppCompatActivity {
     BottomSheetBehavior sheetBehavior;
 
     private EditText code;
-    private LinearLayout search,btn_scan;
+    private LinearLayout search;
     private NotesAdapter mAdapter;
     private List<Note> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
     private LinearLayout noNotesView;
     private Double total_price,vat,sub;
-    private String userid,barcode;
+    private String userid,barcode,shop,serial_no;
 
     private DatabaseHelper db;
     private SQLiteHandler user_db;
     private SessionManager session;
+    private  BroadcastReceiver mSdcardReceiver;
 
     private ProgressDialog pDialog;
+
+//    Scan scan = null;
+    MiniLcd miniLcd = null;
+
+    boolean open_flg = false;
 
 
     @Override
@@ -96,13 +109,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        serial_no=generateSerial(5);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
+        //scan= new Scan();
+        miniLcd = new MiniLcd();
+//        startTask();
+//        openMiniLcd();
+//        displayString();
+//        displayPicture();
 
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
 
@@ -124,31 +142,32 @@ public class MainActivity extends AppCompatActivity {
 //        String name = user.get("name");
 //        String email = user.get("email");
         userid=user.get("u_id");
+        shop=user.get("shop");
 
         db = new DatabaseHelper(this);
 
         notesList.addAll(db.getAllNotes());
 
-
+//scan.open();
 
         code=(EditText) findViewById(R.id.barcode);
         search=(LinearLayout) findViewById(R.id.btn_send);
-        btn_scan=(LinearLayout) findViewById(R.id.btn_scan);
+//        btn_scan=(LinearLayout) findViewById(R.id.btn_scan);
         recyclerView = findViewById(R.id.recyler_view);
 
-        code.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                   btn_scan.setVisibility(View.GONE);
-                   search.setVisibility(View.VISIBLE);
-
-                }else {
-                    btn_scan.setVisibility(View.VISIBLE);
-                    search.setVisibility(View.GONE);
-                }
-            }
-        });
+//        code.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus){
+//                   btn_scan.setVisibility(View.GONE);
+//                   search.setVisibility(View.VISIBLE);
+//
+//                }else {
+//                    btn_scan.setVisibility(View.VISIBLE);
+//                    search.setVisibility(View.GONE);
+//                }
+//            }
+//        });
         code.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
@@ -207,18 +226,50 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent= new Intent(MainActivity.this, PayActivity.class);
                 intent.putExtra("total", total_price);
                 startActivity(intent);
+                finish();
 
             }
         });
-        btn_scan.setOnClickListener(new View.OnClickListener() {
+
+        IntentFilter filter= new IntentFilter();
+        filter.addAction("android.scan7003.info");
+
+        mSdcardReceiver= new BroadcastReceiver(){
+
             @Override
-            public void onClick(View v) {
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("android.scan7003.info")){
 
-                Intent intent= new Intent(MainActivity.this, ScanActivity.class);
-                startActivity(intent);
+                    barcode=intent.getStringExtra("result");
+                    Log.d(TAG, "Print Response: " + barcode);
+                    getItem(barcode,userid);
 
+                }
             }
-        });
+        };
+
+        registerReceiver(mSdcardReceiver,filter);
+//        btn_scan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                barcode = scan.scan(300000);  //if 3 second not scan anything,stop scan and display "not scan any info!!!"
+////                barcode = getIntent().getStringExtra("code");
+//                // Toast.makeText(MainActivity.this,barcode,Toast.LENGTH_LONG).show();
+//                // close the activity in case of empty barcode
+//                code.setText(barcode);
+//                if (!TextUtils.isEmpty(barcode)) {
+//                    Toast.makeText(MainActivity.this,barcode,Toast.LENGTH_LONG).show();
+//
+//                    getItem(barcode,userid);
+//                    scan.close();
+//
+//                }else{
+//                    scan.close();
+//                    //  Toast.makeText(getApplicationContext(), "Barcode is empty, Scan again!", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,17 +300,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        barcode = getIntent().getStringExtra("code");
-       // Toast.makeText(MainActivity.this,barcode,Toast.LENGTH_LONG).show();
-        // close the activity in case of empty barcode
-        if (!TextUtils.isEmpty(barcode)) {
-            Toast.makeText(MainActivity.this,barcode,Toast.LENGTH_LONG).show();
-
-            getItem(barcode,userid);
-
-        }else{
-          //  Toast.makeText(getApplicationContext(), "Barcode is empty, Scan again!", Toast.LENGTH_LONG).show();
-        }
+//miniLCD
+        ShowCustomer();
 
         //copute total
         addToPrice();
@@ -314,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
      */
 //    @OnClick(R.id.select)
 //    public void showBottomSheetDialog() {
-//        View view = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_dialog, null);
+//         = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_dialog, null);
 //
 //        BottomSheetDialog dialog = new BottomSheetDialog(this);
 //        dialog.setContentView(view);
@@ -325,10 +367,23 @@ public class MainActivity extends AppCompatActivity {
      * Inserting new note in db
      * and refreshing the list
      */
+    public static String generateSerial(int length){
+        String alphabet =
+                new String("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"); //9
+        int n = alphabet.length(); //10
+
+        String result = new String();
+        Random r = new Random(); //11
+
+        for (int i=0; i<length; i++) //12
+            result = result + alphabet.charAt(r.nextInt(n)); //13
+
+        return result;
+    }
     private void createNote(String uuid,String item,String price,String gtin,String warehouse,String wid,String manufacturer,String mid,String gs1,String retailer) {
         // inserting note in db and getting
         // newly inserted note id
-        long id = db.insertNote(uuid,item,price,gtin,warehouse,wid,manufacturer,mid,gs1,retailer);
+        long id = db.insertNote(uuid,item,price,gtin,warehouse,wid,manufacturer,mid,gs1,retailer,serial_no,0);
 
         // get the newly inserted note from db
         Note n = db.getNote(id);
@@ -379,7 +434,8 @@ public class MainActivity extends AppCompatActivity {
         notesList.remove(position);
         mAdapter.notifyItemRemoved(position);
         addToPrice();
-
+miniLcd.close();
+ShowCustomer();
         toggleEmptyNotes();
     }
 
@@ -406,7 +462,123 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
+    private void startTask() {
+        // TODO Auto-generated method stub
+        new Thread(){
 
+            public void run() {
+                int color = 0;
+                int ret;
+                while(true)
+                {
+                    Log.i("guanjie", "color:"+color);
+                    ret = miniLcd.fullScreen(color);
+
+                    color++;
+                    if(color>12)
+                    {
+                        ret = miniLcd.fullScreen(0XF800);
+                        break;
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+    }
+    public void openMiniLcd()
+    {
+        Log.i("guanjie", "openMiniLcd");
+        int ret = miniLcd.open();
+        if(ret!=0)
+        {
+            return;
+        }
+        startTask();
+        
+        Log.i("guanjie", "ret:"+ret);
+    }
+    public void fullScreenByRGB()
+    {
+        Log.i("guanjie", "fullScreenByRGB");
+        int ret;
+        ret = miniLcd.fullScreen(000000);
+        
+        Log.i("guanjie", "ret:"+ret);
+    }
+//    public void displayString()
+//    {
+//        Log.i("guanjie", "displayString");
+//        int ret;
+////        ret = miniLcd.displayString(30,30,000000,206195208,"WELCOME TO THAMANI ONLINE",12);
+////        ret = miniLcd.displayString(60,60,000000,206195208,"WELCOME TO THAMANI ONLINE",12);
+//
+//        Log.i("guanjie", "ret:"+ret);
+//    }
+
+    public void displayPicture()
+    {
+        Log.i("guanjie", "displayPicture");
+        int ret;
+        //ret = miniLcd.displayString((480-("hello world").length()*24)/2,(332-12)/2,000000,0,"hello world");
+        ret = miniLcd.displayPicture(50,50, BitmapFactory.decodeResource(getResources(), R.drawable.thamani_logo));
+
+        Log.i("guanjie", "ret:"+ret);
+    }
+    public void fillRectangle()
+    {
+        Log.i("guanjie", "fillRectangle");
+        int ret;
+        ret = miniLcd.fullRectangle(480/2-40, 332/2-40, 480/2+40, 332/2+40, 0);
+
+        Log.i("guanjie", "ret:"+ret);
+    }
+    public void drawLine()
+    {
+        Log.i("guanjie", "drawLine");
+        int ret;
+        //ret = miniLcd.displayString((480-("hello world").length()*24)/2,(332-12)/2,000000,0,"hello world");
+        ret = miniLcd.drawLine(480/2, 332/2, 480/2+40, 332/2, 000000);
+        ret = miniLcd.drawLine(480/2, 332/2, 480/2, 332/2+40, 000000);
+        ret = miniLcd.drawLine(480/2, 332/2, 480/2+32, 332/2+32, 000000);
+
+        Log.i("guanjie", "ret:"+ret);
+    }
+
+    private void  ShowCustomer(){
+miniLcd.open();
+//        miniLcd.displayBootPicture(225,255,255);
+//        miniLcd.eraseUserPicture(206195208);
+        miniLcd.fullRectangle(2,2,476,316,206195208);
+
+//        miniLcd.displayPicture(32,0, BitmapFactory.decodeResource(getResources(), R.drawable.thamani_logo_black));
+
+
+        miniLcd.displayString(55,30,000000,206195208,"RETAILER NAME:"+ shop,12);
+
+        miniLcd.displayString(32,70,000000,206195208,"---------------------------------",10);
+        miniLcd.displayString(32,120,000000,206195208,"ITEM        QTY       PRICE (KES)  ",10);
+//        miniLcd.displayString(32,80,000000,206195208,"----------------------------",10);
+
+        ArrayList<Note>  notes = new ArrayList<>();
+        notes.addAll(db.printOneItems());
+        Log.d(TAG, "Print Response: " + String.valueOf(notes));
+
+        for(int i=0;i<notes.size();i++) {
+            miniLcd.displayString(32,155,000000,206195208,notes.get(i).getItem()+"     1         "+ notes.get(i).getPrice(),32);
+        }
+        total_price=db.getTotalPrice();
+
+        miniLcd.displayString(32,230,000000,206195208,"TOTAL AMOUNT:  KES "+ String.format("KES. %.2f",total_price),12);
+        miniLcd.displayString(90,275,000000,206195208,"Powered by Thamani Online ",12);
+
+        miniLcd.close();
+
+    }
     /**
      * function to verify login details in mysql db
      * */
@@ -455,10 +627,16 @@ public class MainActivity extends AppCompatActivity {
                         String gtin = data.getString("GTIN");
 
                         createNote(uuid, item, price,gtin,warehouse,wid,manufacturer,mid,gs1,retailer);
+                        miniLcd.close();
+
+                        ShowCustomer();
 
                         addToPrice();
 
+
                         toggleEmptyNotes();
+
+
                         // Inserting row in users table
 //                        db.addItems(uuid, item, price,gtin,items);
 
@@ -506,7 +684,7 @@ public class MainActivity extends AppCompatActivity {
      */
 //    private void showNoteDialog(final boolean shouldUpdate, final Note note, final int position) {
 //        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
-//        View view = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
+//         = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
 //
 //        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(MainActivity.this);
 //        alertDialogBuilderUserInput.setView(view);
@@ -566,7 +744,7 @@ public class MainActivity extends AppCompatActivity {
      */
 //    private void showAddDialog(final boolean shouldUpdate, final Note note, final int position,final String uuid,final String item,final String price,final String gtin,final String warehouse,final String wid,final String manufacturer,final String mid,final String gs1,final String retailer) {
 //        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
-//        View view = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
+//         = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
 //
 //        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(MainActivity.this);
 //        alertDialogBuilderUserInput.setView(view);
@@ -577,7 +755,7 @@ public class MainActivity extends AppCompatActivity {
 //        TextView price2 = view.findViewById(R.id.price);
 //
 //        name2.setText("Product: "+ item);
-//        price2.setText("Price: Ksh."+ price);
+//        price2.setText("Price: KES."+ price);
 
 
 
@@ -668,14 +846,17 @@ public class MainActivity extends AppCompatActivity {
 
         total_price=db.getTotalPrice();
 
-        total.setText("Ksh."+total_price.toString());
+        total.setText(String.format("KES. %.2f",total_price));
         //compute vat
         vat=total_price*0.16;
-        vatt.setText(String.format("Ksh. %.2f",vat));
+        vatt.setText(String.format("KES. %.2f",vat));
 
         sub=total_price-vat;
-        subb.setText("Ksh."+sub.toString());
+        subb.setText(String.format("KES. %.2f",sub));
+        miniLcd.displayString(0,250,000000,206195208,"Total         : " + String.format("KES. %.2f",total_price),16);
+
     }
+
     /**
      * showing bottom sheet dialog fragment
      * same layout is used in both dialog and dialog fragment
@@ -708,7 +889,33 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_logout) {
             logoutUser();
             return true;
+        }else   if (id == R.id.action_offline) {
+            startActivity(new Intent(MainActivity.this,OfflineActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static String timeBuilder() {
+
+        Calendar cal = Calendar.getInstance();
+        cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(cal.getTime());
+    }
+
+    public static String dateBuilder() {
+        /*DateFormat format = new SimpleDateFormat("dd/MM/yyyy ");
+        Date date = new Date();
+        String dot = format.format(date);
+        return dot;*/
+
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        String dot = format.format(date);
+        return dot;
+
+
+    }
+
 }
