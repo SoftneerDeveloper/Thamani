@@ -36,10 +36,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.project.thamani.activity.MpesaActivity.generateSerial;
+
 public class FinishActivity extends AppCompatActivity {
 
     private Button btn_sale;
-    private String userid,payy,shop,username,staff_id;
+    private String userid,payy,shop,username,staff_id,serial;
     private static final String TAG = FinishActivity.class.getSimpleName();
     private String cash="cash";
 
@@ -64,7 +66,9 @@ public class FinishActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
         miniLcd = new MiniLcd();
-
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
+        serial="ONLINE"+generateSerial(5)+ts;
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +102,7 @@ public class FinishActivity extends AppCompatActivity {
         try {
             sales.put("sale",db.getAllItems());
             sales.put("mode","cash");
+            sales.put("serial",serial);
             sales.put("user_id",userid);
             sales.put("staff_id",staff_id);
         } catch (JSONException e) {
