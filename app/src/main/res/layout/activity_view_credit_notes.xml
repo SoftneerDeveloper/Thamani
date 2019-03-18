@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/view_credit_notes"
     android:padding="4dp"
     tools:context=".activity.ViewCreditNotesActivity">
     <android.support.v4.widget.NestedScrollView
@@ -14,6 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/view_credit_notes"
             android:orientation="vertical">
 
 
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:padding="@dimen/dimen_8dp">
+        android:padding="4dp">
         <Button
             android:id="@+id/add"
             android:layout_width="match_parent"

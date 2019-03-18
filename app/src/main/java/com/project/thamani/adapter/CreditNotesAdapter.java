@@ -66,13 +66,23 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Credit item = detailList.get(position);
-//        holder.short_form.setText(item.getNotes().toUpperCase().substring(0,1));
+        if (item.getAll().get(0).getReceiptNumber()!=null)
         holder.receipt_number.setText("Receipt #"+item.getAll().get(0).getReceiptNumber());
-        holder.item_name.setText("Item #"+item.getAll().get(0).getReceiptNumber());
-        holder.quantity.setText("Quantity "+item.getAll().get(0).getQuantity());
+
+        if (item.getAll().get(0).getItem()!=null)
+            holder.item_name.setText("Item #"+item.getAll().get(0).getItem());
+
+        if (item.getAll().get(0).getQuantity()!=null)
+            holder.quantity.setText("Quantity "+item.getAll().get(0).getQuantity());
+
+        if (item.getAll().get(0).getCustomer()!=null)
         holder.customer.setText("Customer "+item.getAll().get(0).getCustomer());
-        holder.phone.setText(item.getAll().get(0).getPhone());
-        holder.description.setText(item.getAll().get(0).getNotes());
+
+        if (item.getAll().get(0).getPhone()!=null)
+            holder.phone.setText(item.getAll().get(0).getPhone());
+
+        if (item.getAll().get(0).getNotes()!=null)
+            holder.description.setText(item.getAll().get(0).getNotes());
 
 
     }
