@@ -7,13 +7,13 @@ public class All {
 
 @SerializedName("uuid")
 @Expose
-private Integer uuid;
+private String uuid;
 @SerializedName("receipt_number")
 @Expose
 private String receiptNumber;
 @SerializedName("quantity")
 @Expose
-private Integer quantity;
+private String quantity;
 @SerializedName("phone")
 @Expose
 private String phone;
@@ -22,7 +22,7 @@ private String phone;
 private String notes;
 @SerializedName("item")
 @Expose
-private Integer item;
+private String item;
 @SerializedName("customer")
 @Expose
 private String customer;
@@ -30,11 +30,11 @@ private String customer;
 @Expose
 private String active;
 
-public Integer getUuid() {
+public String getUuid() {
 return uuid;
 }
 
-public void setUuid(Integer uuid) {
+public void setUuid(String uuid) {
 this.uuid = uuid;
 }
 
@@ -46,11 +46,11 @@ public void setReceiptNumber(String receiptNumber) {
 this.receiptNumber = receiptNumber;
 }
 
-public Integer getQuantity() {
+public String getQuantity() {
 return quantity;
 }
 
-public void setQuantity(Integer quantity) {
+public void setQuantity(String quantity) {
 this.quantity = quantity;
 }
 
@@ -70,11 +70,11 @@ public void setNotes(String notes) {
 this.notes = notes;
 }
 
-public Integer getItem() {
+public String getItem() {
 return item;
 }
 
-public void setItem(Integer item) {
+public void setItem(String item) {
 this.item = item;
 }
 

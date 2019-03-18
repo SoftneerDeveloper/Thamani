@@ -58,7 +58,7 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
 //    private String getFirstWord(String text) {
 //        int index = text.indexOf(' ');
 //        if (index > -1) { // Check if there is more than one word.
-//            return text.substring(0, index); // Extract first word.
+//            return text.substring(position, index); // Extract first word.
 //        } else {
 //            return text; // Text is the first word itself.
 //        }
@@ -66,23 +66,25 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Credit item = detailList.get(position);
-        if (item.getAll().get(0).getReceiptNumber()!=null)
-        holder.receipt_number.setText("Receipt #"+item.getAll().get(0).getReceiptNumber());
+        if (item.getAll().get(position)!=null)
 
-        if (item.getAll().get(0).getItem()!=null)
-            holder.item_name.setText("Item #"+item.getAll().get(0).getItem());
+            if (item.getAll().get(position).getReceiptNumber()!=null)
+        holder.receipt_number.setText("Receipt #"+item.getAll().get(position).getReceiptNumber());
 
-        if (item.getAll().get(0).getQuantity()!=null)
-            holder.quantity.setText("Quantity "+item.getAll().get(0).getQuantity());
+        if (item.getAll().get(position).getItem()!=null)
+            holder.item_name.setText("Item #"+item.getAll().get(position).getItem());
 
-        if (item.getAll().get(0).getCustomer()!=null)
-        holder.customer.setText("Customer "+item.getAll().get(0).getCustomer());
+        if (item.getAll().get(position).getQuantity()!=null)
+            holder.quantity.setText("Quantity "+item.getAll().get(position).getQuantity());
 
-        if (item.getAll().get(0).getPhone()!=null)
-            holder.phone.setText(item.getAll().get(0).getPhone());
+        if (item.getAll().get(position).getCustomer()!=null)
+        holder.customer.setText("Customer "+item.getAll().get(position).getCustomer());
 
-        if (item.getAll().get(0).getNotes()!=null)
-            holder.description.setText(item.getAll().get(0).getNotes());
+        if (item.getAll().get(position).getPhone()!=null)
+            holder.phone.setText(item.getAll().get(position).getPhone());
+
+        if (item.getAll().get(position).getNotes()!=null)
+            holder.description.setText(item.getAll().get(position).getNotes());
 
 
     }
