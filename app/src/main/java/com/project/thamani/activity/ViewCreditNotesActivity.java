@@ -182,7 +182,6 @@ private LinearLayout view_credit_notes;
                         load.setVisibility(View.GONE);
                         // stop animating Shimmer and hide the layout
 
-
                     }
                 }, new Response.ErrorListener() {
             @Override
