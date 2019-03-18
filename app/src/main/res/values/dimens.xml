@@ -46,6 +46,8 @@
     <dimen name="img_poster_height">200dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
 
+    <dimen name="corner_radius_remove_item">3dp</dimen>
+
     <dimen name="thumbnail2">40dp</dimen>
     <dimen name="row_padding">10dp</dimen>
     <dimen name="contact_name">15dp</dimen>

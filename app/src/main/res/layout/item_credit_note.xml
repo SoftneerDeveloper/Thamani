@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/view_credit_notes"
+        android:layout_height="wrap_content"
+       android:layout_gravity="top">
+
+        <!--<View-->
+            <!--android:layout_width="6dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--/>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        <LinearLayout
+            android:id="@+id/note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/receipt_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    
+                    android:gravity="end"
+                    android:padding="4dp"
+                    android:textSize="15sp"
+                    android:text="receipt_number"
+                    android:textColor="@color/primary_text" />
+
+                <TextView
+                    android:id="@+id/item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:layout_below="@+id/receipt_number"
+                    android:padding="4dp"
+                    android:textColor="@color/chef"
+                    android:text="item_name"
+                    
+                     />
+                <TextView
+                    android:id="@+id/quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:layout_below="@+id/receipt_number"
+                    android:padding="4dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/chef"
+                    android:textSize="12sp"
+                    android:text="quantity"
+
+                    />
+                <TextView
+                    android:id="@+id/customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:layout_below="@+id/item_name"
+                    android:gravity="start"
+                    android:padding="4dp"
+                    android:textColor="@color/chef"
+                    android:text="customer:"
+                    
+                     />
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:layout_below="@+id/item_name"
+                    android:textAlignment="textEnd"
+                    android:padding="4dp"
+                    android:textColor="@color/chef"
+                    android:text="phone"
+
+                    />
+
+                <TextView
+                    android:id="@+id/active"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_box"
+                    android:layout_alignParentRight="true"
+                    android:padding="2dp"
+                    android:layout_margin="4dp"
+                    android:text="status active "
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phone"
+                    android:gravity="start"
+                    android:padding="4dp"
+                    android:textColor="@color/chef"
+                    android:text="description:"
+
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+        </RelativeLayout>
+</LinearLayout>

@@ -57,9 +57,19 @@
             android:label="Sale Complete"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.MpesaActivity" />
-        <activity android:name=".activity.OfflineActivity"
+        <activity
+            android:name=".activity.OfflineActivity"
             android:label="Offline Transactions"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.CreditNotes"
+            android:label="Add Credit Notes"
+            android:parentActivityName=".activity.ViewCreditNotesActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.ViewCreditNotesActivity"
+            android:label="Credit Notes"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
