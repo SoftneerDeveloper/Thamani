@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.project.thamani.R;
-import com.project.thamani.model.Credit;
+import com.project.thamani.model.All;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.MyViewHolder> {
     private Context context;
-    private List<Credit> detailList;
+    private List<All> detailList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +43,7 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
     }
 
 
-    public CreditNotesAdapter(Context context, List<Credit> cartList) {
+    public CreditNotesAdapter(Context context, List<All> cartList) {
         this.context = context;
         this.detailList = cartList;
     }
@@ -65,37 +65,51 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
 //    }
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final Credit item = detailList.get(position);
-        if (item.getAll().get(position)!=null)
+        final All item = detailList.get(position);
+        if (item != null) {
 
-            if (item.getAll().get(position).getReceiptNumber()!=null)
-        holder.receipt_number.setText("Receipt #"+item.getAll().get(position).getReceiptNumber());
+                if (item.getReceiptNumber() != null)
+                    holder.receipt_number.setText("Receipt #"  + item.getReceiptNumber());
 
-        if (item.getAll().get(position).getItem()!=null)
-            holder.item_name.setText("Item #"+item.getAll().get(position).getItem());
+            if (item.getItem() != null)
+                holder.item_name.setText("Item #" + item.getItem());
 
-        if (item.getAll().get(position).getQuantity()!=null)
-            holder.quantity.setText("Quantity "+item.getAll().get(position).getQuantity());
+            if (item.getQuantity() != null)
+                holder.quantity.setText("Quantity " + item.getQuantity());
 
-        if (item.getAll().get(position).getCustomer()!=null)
-        holder.customer.setText("Customer "+item.getAll().get(position).getCustomer());
+            if (item.getCustomer() != null)
+                holder.customer.setText("Customer " + item.getCustomer());
 
-        if (item.getAll().get(position).getPhone()!=null)
-            holder.phone.setText(item.getAll().get(position).getPhone());
+            if (item.getPhone() != null)
+                holder.phone.setText(item.getPhone());
 
-        if (item.getAll().get(position).getNotes()!=null)
-            holder.description.setText(item.getAll().get(position).getNotes());
-
+            if (item.getNotes() != null)
+                holder.description.setText(item.getNotes());
+        }
 
     }
-    public Credit getItem(int position) {
+    public All getItem(int position) {
         return detailList.get(position);
     }
+
     @Override
     public int getItemCount() {
         return detailList.size();
     }
 
+    // recipe
+    private String listToString(List<String> stringList){
+        String s= "";
+        if(stringList != null)
+            for (int i=0;i<stringList.size();i++){
+                if(i == stringList.size()-1){
+                    s+=stringList.get(0);
+                }else{
+                    s+=stringList.get(i)+", ";
+                }
+            }
+        return s;
+    }
 
 
 }

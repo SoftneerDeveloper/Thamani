@@ -10,14 +10,14 @@ public class Credit {
 
 @SerializedName("data")
 @Expose
-private List<All> data = null;
+private List<All> all = null;
 
 public List<All> getAll() {
-return data;
+return all;
 }
 
-public void setAll(List<All> data) {
-this.data = data;
+public void setAll(List<All> all) {
+this.all = all;
 }
 
 }

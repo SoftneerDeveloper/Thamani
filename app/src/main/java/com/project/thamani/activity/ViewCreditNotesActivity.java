@@ -34,7 +34,7 @@ import com.project.thamani.database.DatabaseHelper;
 import com.project.thamani.helper.MyDividerItemDecoration;
 import com.project.thamani.helper.S;
 import com.project.thamani.helper.SQLiteHandler;
-import com.project.thamani.model.Credit;
+import com.project.thamani.model.All;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +55,7 @@ public class ViewCreditNotesActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
 
     private RecyclerView recyclerView;
-    private List<Credit> detailList;
+    private List<All> detailList;
     private CreditNotesAdapter mAdapter;
 
     private int progressStatus = 0;
@@ -169,13 +169,13 @@ private LinearLayout view_credit_notes;
                             return;
                         }
 
-                        List<Credit> wishlists = new Gson().fromJson(data.toString(), new TypeToken<List<Credit>>() {
+                        List<All> alls = new Gson().fromJson(data.toString(), new TypeToken<List<All>>() {
                         }.getType());
 
                         // adding recipes to cart list
                         detailList.clear();
 
-                        detailList.addAll(wishlists);
+                        detailList.addAll(alls);
 
                         // refreshing recycler view
                         mAdapter.notifyDataSetChanged();
