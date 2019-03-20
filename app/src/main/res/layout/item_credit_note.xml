@@ -109,6 +109,19 @@
                     android:text="description:"
 
                     />
+                <Button
+                    android:id="@+id/print_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:background="@drawable/bg_btn_remove_item2"
+                    android:layout_below="@+id/description"
+                    android:padding="2dp"
+                    android:layout_margin="4dp"
+                    android:text="Print note "
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent2"
+                    android:textSize="12sp" />
+
             </RelativeLayout>
 
         </LinearLayout>

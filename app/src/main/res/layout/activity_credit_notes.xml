@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="Provide the following details" />
+        android:text="Enter the following details" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:id="@+id/receipt_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Receipt number" />
+            android:hint="Receipt number" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -47,7 +47,7 @@
             android:id="@+id/item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Item" />
+            android:hint="Item" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -106,14 +106,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="end"
         android:layout_margin="@dimen/dimen_8dp"
         android:weightSum="2">
 
         <Button
             android:id="@+id/clear"
             android:layout_width="0dp"
-            android:layout_height="32dp"
+            android:layout_height="40dp"
             android:textColor="@color/colorAccent"
             android:textSize="14sp"
             android:layout_margin="4dp"
@@ -125,7 +125,7 @@
         <Button
             android:id="@+id/save"
             android:layout_width="0dp"
-            android:layout_height="32dp"
+            android:layout_height="40dp"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_margin="4dp"

@@ -4,20 +4,32 @@ package com.project.thamani.adapter;
  * Created by ravi on 26/09/17.
  */
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.pt.minilcd.MiniLcd;
+import android.pt.printer.Printer;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.project.thamani.R;
+import com.project.thamani.helper.SQLiteHandler;
 import com.project.thamani.model.All;
+import com.project.thamani.model.Note;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.project.thamani.activity.FinalActivity.dateBuilder;
+import static com.project.thamani.activity.FinalActivity.timeBuilder;
 
 
 public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.MyViewHolder> {
@@ -26,8 +38,20 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView receipt_number,item_name,quantity,description,phone,customer;
+        public TextView receipt_number,item_name,quantity,description,phone,customer,active;
+        private Button print_note;
+        MiniLcd miniLcd = null;
 
+        private int ret;
+
+
+        boolean open_flg = false;
+
+        Printer printer ;
+
+        private ProgressDialog pDialog;
+        private SQLiteHandler user_db;
+        private  String username,phone2,shop,staff_id;
 
         public MyViewHolder(View view) {
             super(view);
@@ -37,7 +61,22 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
             description = view.findViewById(R.id.description);
             phone = view.findViewById(R.id.phone);
             customer = view.findViewById(R.id.customer);
+            active = view.findViewById(R.id.active);
+            print_note = view.findViewById(R.id.print_note);
 
+            miniLcd = new MiniLcd();
+            printer= new Printer();
+            ret =  printer.open();
+
+            // Fetching user details from SQLite
+            HashMap<String, String> user = user_db.getUserDetails();
+
+//        String name = user.get("name");
+//        String email = user.get("email");
+            username=user.get("username");
+            phone2=user.get("phone");
+            shop=user.get("shop");
+            staff_id=user.get("id");
 
         }
     }
@@ -64,7 +103,7 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
 //        }
 //    }
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final All item = detailList.get(position);
         if (item != null) {
 
@@ -86,6 +125,57 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
             if (item.getNotes() != null)
                 holder.description.setText(item.getNotes());
         }
+        assert item != null;
+        if (item.getActive().equals("false")){
+            holder.active.setVisibility(View.GONE);
+            holder.print_note.setVisibility(View.GONE);
+    }
+    
+    holder.print_note.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+
+            
+            holder.ret = holder.printer.printBlankLines(1);
+            holder.printer.setBold(true);
+            holder.printer.setFontSize(28);
+            holder.printer.printString("THAMANI ONLINE");
+            holder.printer.setBold(false);
+            holder.printer.printString("RETAILER NAME");
+            holder.printer.setBold(false);
+            holder.printer.printString("Customer Care: "+ holder.phone2);
+            holder.printer.printString("Date : " + dateBuilder() + "\t" + timeBuilder());
+            holder.printer.printString("******  Credit Note Receipt  *****");
+            holder.printer.printString("----------------------------");
+
+                holder.printer.printString("Receipt number:   "+ item.getReceiptNumber());
+                holder.printer.printString("Item:             "+ item.getItem());
+                holder.printer.printString("Quantity:         "+ item.getQuantity());
+                holder.printer.printString("Customer:         "+ item.getCustomer());
+                holder.printer.printString("Phone number:     "+ item.getPhone());
+                holder.printer.printString("Description:      "+ item.getNotes());
+
+            holder.printer.printString("----------------------------");
+
+            holder.printer.setBold(true);
+            holder.printer.printString("Served By :"+ holder.username);
+            holder.printer.setBold(false);
+            holder.printer.printString("***Asante, Karibu tena ***");
+            holder.printer.printString("Powered by Thamani Online ");
+            holder.printer.printString("  ");
+            holder.printer.printString("  ");
+            holder.printer.printString("  ");
+            holder.printer.printString("  ");
+
+            holder.printer.printBlankLines(20);
+
+
+
+
+            holder.printer.close(); 
+        }
+    });
 
     }
     public All getItem(int position) {
