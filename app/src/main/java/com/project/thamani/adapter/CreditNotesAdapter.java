@@ -68,6 +68,8 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
             printer= new Printer();
             ret =  printer.open();
 
+            user_db = new SQLiteHandler(context);
+
             // Fetching user details from SQLite
             HashMap<String, String> user = user_db.getUserDetails();
 
