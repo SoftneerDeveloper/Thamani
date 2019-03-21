@@ -136,7 +136,6 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
         public void onClick(View v) {
 
 
-            
             holder.ret = holder.printer.printBlankLines(1);
             holder.printer.setBold(true);
             holder.printer.setFontSize(28);
@@ -144,17 +143,17 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
             holder.printer.setBold(false);
             holder.printer.printString("RETAILER NAME");
             holder.printer.setBold(false);
-            holder.printer.printString("Customer Care: "+ holder.phone2);
+            holder.printer.printString("Customer Care: 0"+ holder.phone2);
             holder.printer.printString("Date : " + dateBuilder() + "\t" + timeBuilder());
-            holder.printer.printString("******  Credit Note Receipt  *****");
+            holder.printer.printString("****  Credit Note Receipt  ****");
             holder.printer.printString("----------------------------");
 
-                holder.printer.printString("Receipt number:   "+ item.getReceiptNumber());
-                holder.printer.printString("Item:             "+ item.getItem());
-                holder.printer.printString("Quantity:         "+ item.getQuantity());
-                holder.printer.printString("Customer:         "+ item.getCustomer());
-                holder.printer.printString("Phone number:     "+ item.getPhone());
-                holder.printer.printString("Description:      "+ item.getNotes());
+                holder.printer.printString("Receipt number: "+ item.getReceiptNumber());
+                holder.printer.printString("Item:           "+ item.getItem());
+                holder.printer.printString("Quantity:       "+ item.getQuantity());
+                holder.printer.printString("Customer:       "+ item.getCustomer());
+                holder.printer.printString("Phone number:   "+ item.getPhone());
+                holder.printer.printString("Description:    "+ item.getNotes());
 
             holder.printer.printString("----------------------------");
 
@@ -168,7 +167,7 @@ public class CreditNotesAdapter extends RecyclerView.Adapter<CreditNotesAdapter.
             holder.printer.printString("  ");
             holder.printer.printString("  ");
 
-            holder.printer.printBlankLines(20);
+            holder.printer.printBlankLines(15);
 
 
 
