@@ -64,7 +64,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
         user_db = new SQLiteHandler(context);
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
-        serial="OFFLINE"+generateSerial(5)+ts;
+        serial="OFFLINE"+ts;
 
         final JSONObject sales= new JSONObject();
 
@@ -82,7 +82,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
         try {
             sales.put("sale",db.getAllOfflineItems());
             sales.put("mode","cash");
-            sales.put("serial",serial);
+            sales.put("status",serial);
             sales.put("user_id",userid);
             sales.put("staff_id",staff_id);
         } catch (JSONException e) {

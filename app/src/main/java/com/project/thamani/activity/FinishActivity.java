@@ -68,7 +68,7 @@ public class FinishActivity extends AppCompatActivity {
         miniLcd = new MiniLcd();
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
-        serial="ONLINE"+generateSerial(5)+ts;
+        serial="ONLINE"+ts;
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +102,7 @@ public class FinishActivity extends AppCompatActivity {
         try {
             sales.put("sale",db.getAllItems());
             sales.put("mode","cash");
-            sales.put("serial",serial);
+            sales.put("status",serial);
             sales.put("user_id",userid);
             sales.put("staff_id",staff_id);
         } catch (JSONException e) {
@@ -111,7 +111,7 @@ public class FinishActivity extends AppCompatActivity {
 
         Log.d(TAG, "Add Response: " + String.valueOf(sales));
 
-//        Toast.makeText(this, String.valueOf(sales), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(sales), Toast.LENGTH_SHORT).show();
         Intent intent = getIntent();
 
         total = intent.getExtras().getDouble("total");

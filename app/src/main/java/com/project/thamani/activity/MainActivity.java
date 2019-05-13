@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNote(String uuid,String item,String price,String gtin,String warehouse,String wid,String manufacturer,String mid,String gs1,String retailer) {
         // inserting note in db and getting
         // newly inserted note id
-        long id = db.insertNote(uuid,item,price,gtin,warehouse,wid,manufacturer,mid,gs1,retailer,serial_no,0);
+        long id = db.insertNote(uuid,item,price,gtin,warehouse,wid,manufacturer,mid,gs1,retailer,serial_no,0,0);
 
         // get the newly inserted note from db
         Note n = db.getNote(id);

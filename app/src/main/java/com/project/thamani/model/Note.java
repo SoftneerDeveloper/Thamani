@@ -21,6 +21,7 @@ public class Note {
     public static final String COLUMN_TIMESTAMP = "timestamp";
     public static final String COLUMN_SERIAL = "serial";
     public static final String COLUMN_OFFLINE = "offline";
+    public static final String COLUMN_PRINTED = "printed";
 
     private int id;
     private String uuid;
@@ -37,6 +38,7 @@ public class Note {
     private String timestamp;
     private String serial;
     private int offline;
+    private int printed;
 
 
     // Create table SQL query
@@ -55,13 +57,14 @@ public class Note {
                     + COLUMN_RETAILER+ " TEXT,"
                     + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP,"
                     + COLUMN_SERIAL + " TEXT,"
-                    + COLUMN_OFFLINE + " INTEGER "
+                    + COLUMN_OFFLINE + " INTEGER,"
+                    + COLUMN_PRINTED + " INTEGER "
                     + ")";
 
     public Note() {
     }
 
-    public Note(int id, String uuid, String item,String name, String price, String gtin,String manufacturer,String mid,String warehouse,String wid,String gs1,String retailer, String timestamp,String serial, int offline) {
+    public Note(int id, String uuid, String item,String name, String price, String gtin,String manufacturer,String mid,String warehouse,String wid,String gs1,String retailer, String timestamp,String serial, int offline,int printed) {
         this.id = id;
         this.uuid = uuid;
         this.item = item;
@@ -77,6 +80,7 @@ public class Note {
         this.timestamp = timestamp;
         this.serial = serial;
         this.offline = offline;
+        this.printed = printed;
     }
 
     public int getId() {
@@ -185,6 +189,13 @@ public class Note {
     }
     public String getSerial() {
         return serial;
+    }
+
+    public void setPrinted(int printed) {
+        this.printed = printed;
+    }
+    public int getPrinted() {
+        return printed;
     }
 
     public void setId(int id) {

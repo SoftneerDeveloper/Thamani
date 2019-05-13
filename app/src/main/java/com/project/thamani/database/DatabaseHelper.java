@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long insertNote(String uuid, String item, String price, String gtin,String warehouse,String wid,String manufacturer,String mid,String gs1,String retailer,String serial, int offline) {
+    public long insertNote(String uuid, String item, String price, String gtin,String warehouse,String wid,String manufacturer,String mid,String gs1,String retailer,String serial, int offline,int printed) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -71,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(Note.COLUMN_RETAILER, retailer);
         values.put(Note.COLUMN_SERIAL, serial);
         values.put(Note.COLUMN_OFFLINE, offline);
+        values.put(Note.COLUMN_PRINTED, printed);
 
         // insert row
         long id = db.insert(Note.TABLE_NAME, null, values);
@@ -87,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Note.TABLE_NAME ,
-                new String[]{Note.COLUMN_ID, Note.COLUMN_UUID, Note.COLUMN_ITEM, Note.COLUMN_PRICE, Note.COLUMN_GTIN, Note.COLUMN_WARE, Note.COLUMN_WID, Note.COLUMN_MAN, Note.COLUMN_MID, Note.COLUMN_GS1, Note.COLUMN_RETAILER, Note.COLUMN_TIMESTAMP, Note.COLUMN_SERIAL, Note.COLUMN_OFFLINE},
+                new String[]{Note.COLUMN_ID, Note.COLUMN_UUID, Note.COLUMN_ITEM, Note.COLUMN_PRICE, Note.COLUMN_GTIN, Note.COLUMN_WARE, Note.COLUMN_WID, Note.COLUMN_MAN, Note.COLUMN_MID, Note.COLUMN_GS1, Note.COLUMN_RETAILER, Note.COLUMN_TIMESTAMP, Note.COLUMN_SERIAL, Note.COLUMN_OFFLINE, Note.COLUMN_OFFLINE},
                 Note.COLUMN_OFFLINE + "=? and " + Note.COLUMN_ID + "=?",
                 new String[]{String.valueOf(0),String.valueOf(id)}, null, null, null, null);
 
@@ -110,7 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(Note.COLUMN_RETAILER)),
                 cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)),
                 cursor.getString(cursor.getColumnIndex(Note.COLUMN_SERIAL)),
-                cursor.getInt(cursor.getColumnIndex(Note.COLUMN_OFFLINE)));
+                cursor.getInt(cursor.getColumnIndex(Note.COLUMN_OFFLINE)),
+                cursor.getInt(cursor.getColumnIndex(Note.COLUMN_PRINTED)));
 
         // close the db connection
         cursor.close();
@@ -196,7 +198,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Note> notes = new ArrayList<>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 0" + " ORDER BY " +
+        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_PRINTED + " = 0" + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -234,7 +236,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Note> notes = new ArrayList<>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 0" + " ORDER BY " +
+        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_PRINTED + " = 0" + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + "   DESC LIMIT 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -271,7 +273,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public JSONArray getAllItems() {
 
         // Select All Query
-        String selectQuery = "SELECT " + Note.COLUMN_UUID + "," + Note.COLUMN_PRICE + "," + Note.COLUMN_MAN + "," + Note.COLUMN_MID + "," + Note.COLUMN_WARE + "," + Note.COLUMN_WID + "," + Note.COLUMN_GS1 + "," + Note.COLUMN_RETAILER + "  FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 0" + " ORDER BY " +
+        String selectQuery = "SELECT " + Note.COLUMN_UUID + "," + Note.COLUMN_PRICE + "," + Note.COLUMN_MAN + "," + Note.COLUMN_MID + "," + Note.COLUMN_WARE + "," + Note.COLUMN_WID + "," + Note.COLUMN_GS1 + "," + Note.COLUMN_RETAILER +"," + Note.COLUMN_SERIAL + "  FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 0" + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -314,7 +316,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public JSONArray getAllOfflineItems() {
 
         // Select All Query
-        String selectQuery = "SELECT " + Note.COLUMN_UUID + "," + Note.COLUMN_PRICE + "," + Note.COLUMN_MAN + "," + Note.COLUMN_MID + "," + Note.COLUMN_WARE + "," + Note.COLUMN_WID + "," + Note.COLUMN_GS1 + "," + Note.COLUMN_RETAILER + "  FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 1" + " ORDER BY " +
+        String selectQuery = "SELECT " + Note.COLUMN_UUID + "," + Note.COLUMN_PRICE + "," + Note.COLUMN_MAN + "," + Note.COLUMN_MID + "," + Note.COLUMN_WARE + "," + Note.COLUMN_WID + "," + Note.COLUMN_GS1 + "," + Note.COLUMN_RETAILER + "," + Note.COLUMN_SERIAL + "  FROM " + Note.TABLE_NAME + " WHERE " +Note.COLUMN_OFFLINE + " = 1" + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -455,6 +457,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(Note.TABLE_NAME , values, Note.COLUMN_OFFLINE + " = ?", new String[]{String.valueOf(0)});
                 db.close();
     }
+    public void updatePrinted( ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Note.COLUMN_PRINTED, 1);
+
+        // updating row
+        db.update(Note.TABLE_NAME , values, Note.COLUMN_PRINTED + " = ?", new String[]{String.valueOf(0)});
+        db.close();
+    }
+
     public void updateOfflineBack( ) {
         SQLiteDatabase db = this.getWritableDatabase();
 

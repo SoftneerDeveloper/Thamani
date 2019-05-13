@@ -218,6 +218,8 @@ Print();
 
 
         printer.close();
+        db.updatePrinted();
+
 
     }
     private void  ShowCustomer(){
