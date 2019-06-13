@@ -88,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Note.TABLE_NAME ,
-                new String[]{Note.COLUMN_ID, Note.COLUMN_UUID, Note.COLUMN_ITEM, Note.COLUMN_PRICE, Note.COLUMN_GTIN, Note.COLUMN_WARE, Note.COLUMN_WID, Note.COLUMN_MAN, Note.COLUMN_MID, Note.COLUMN_GS1, Note.COLUMN_RETAILER, Note.COLUMN_TIMESTAMP, Note.COLUMN_SERIAL, Note.COLUMN_OFFLINE, Note.COLUMN_OFFLINE},
+                new String[]{Note.COLUMN_ID, Note.COLUMN_UUID, Note.COLUMN_ITEM, Note.COLUMN_PRICE, Note.COLUMN_GTIN, Note.COLUMN_WARE, Note.COLUMN_WID, Note.COLUMN_MAN, Note.COLUMN_MID, Note.COLUMN_GS1, Note.COLUMN_RETAILER, Note.COLUMN_TIMESTAMP, Note.COLUMN_SERIAL, Note.COLUMN_OFFLINE, Note.COLUMN_PRINTED},
                 Note.COLUMN_OFFLINE + "=? and " + Note.COLUMN_ID + "=?",
                 new String[]{String.valueOf(0),String.valueOf(id)}, null, null, null, null);
 
